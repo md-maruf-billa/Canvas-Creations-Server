@@ -8,7 +8,7 @@ const port = process.env.PORT || 7000;
 
 // --------Middle ware hare---------
 app.use(cors({
-    origin:["http://localhost:5173"]
+    origin: ["http://localhost:5173"]
 }));
 app.use(express.json())
 
@@ -39,15 +39,22 @@ async function run() {
         })
 
         // ----------get specific data from database-------
-        app.get("/details/:id",async(req,res)=>{
-            const id = req.params;
-            const quire = {_id: new ObjectId(id)}
-            const result = await craftCollection.findOne(quire);
+        app.get("/details/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await craftCollection.findOne(query);
             res.send(result);
-            
-            
+
+
         })
         //-------------GET DATA USING EMAIL----------
+        app.get("/my-art-and-craftList/:email", async (req, res) => {
+            const email = req.params;
+            const query = { email: email.email };
+            const data = craftCollection.find(query);
+            const result = await data.toArray()
+            res.send(result)
+        })
 
         // ------------POST REQUESTS HARE---------
         app.post("/add-craft-items", async (req, res) => {
@@ -56,7 +63,43 @@ async function run() {
             res.send(result)
         })
 
-        
+
+        //----------------UPDATE CRAFT ITEMS-----------
+
+        app.put("/", async (req, res) => {
+            const data = req.body;
+            const query = { _id: new ObjectId(data._id) }
+            const updateItem = {
+                $set: {
+                    name: data.name,
+                    category: data.category,
+                    description: data.description,
+                    price: data.price,
+                    ratings: data.ratings,
+                    customizable: data.customizable,
+                    processing: data.processing,
+                    stock: data.stock,
+                    photoURL: data.photoURL
+                }
+            }
+            const result = await craftCollection.updateOne(query,updateItem);
+            res.send(result);
+        })
+
+        //---------------DELETE A POST BY USER--------------
+
+
+        app.delete("/:id", async (req, res) => {
+            const id = req.params.id;
+            console.log(id)
+            const query = { _id: new ObjectId(id) };
+            const result = await craftCollection.deleteOne(query);
+            res.send(result);
+        })
+
+
+
+
 
     } finally {
         // Ensures that the client will close when you finish/error
