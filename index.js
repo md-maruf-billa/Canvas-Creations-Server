@@ -51,6 +51,8 @@ async function run() {
         app.get("/my-art-and-craftList/:email", async (req, res) => {
             const email = req.params;
             const query = { email: email.email };
+
+            //-----------Get from Database-------
             const data = craftCollection.find(query);
             const result = await data.toArray()
             res.send(result)
