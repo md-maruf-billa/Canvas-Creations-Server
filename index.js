@@ -31,10 +31,9 @@ async function run() {
         const allCategories = client.db("canvas-creation").collection("allCategories");
 
 
-        app.post("/categories", async(req,res)=>{
-            const data = req.body;
-            const result =await allCategories.insertOne(data);
-            res.send(result)
+        app.get("/categories", async(req,res)=>{
+            const result = await allCategories.find().toArray();
+            res.send(result);
         })
 
         //------------GET DATA FORM DATABASE----------
