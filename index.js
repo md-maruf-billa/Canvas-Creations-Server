@@ -28,6 +28,14 @@ async function run() {
 
         //------------create database and collection------------------
         const craftCollection = client.db("canvas-creation").collection("allArtAndCraft");
+        const allCategories = client.db("canvas-creation").collection("allCategories");
+
+
+        app.post("/categories", async(req,res)=>{
+            const data = req.body;
+            const result =await allCategories.insertOne(data);
+            res.send(result)
+        })
 
         //------------GET DATA FORM DATABASE----------
 
@@ -64,7 +72,7 @@ async function run() {
         })
 
 
-        //----------------UPDATE CRAFT ITEMS-----------
+        //----------------UPDATE CRAFT IT0EMS-----------
 
         app.put("/", async (req, res) => {
             const data = req.body;
