@@ -63,6 +63,14 @@ async function run() {
             res.send(result)
         })
 
+        //----------GET DATA USING CATEGORIES NAME-------------
+        app.get("/category/:categoryName", async(req,res)=>{
+            const category = req.params.categoryName;
+            const query = {category:category}
+            const result = await craftCollection.find(query).toArray();
+            res.send(result)
+        })
+
         // ------------POST REQUESTS HARE---------
         app.post("/add-craft-items", async (req, res) => {
             const data = req.body;
@@ -71,7 +79,7 @@ async function run() {
         })
 
 
-        //----------------UPDATE CRAFT IT0EMS-----------
+        //----------------UPDATE CRAFT ITEMS-----------
 
         app.put("/", async (req, res) => {
             const data = req.body;
